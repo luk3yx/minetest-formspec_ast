@@ -126,6 +126,13 @@ validate = {
         texture_name = 'string'},
     button = {x = 'number', y = 'number', w = 'number', h = 'number',
         name = 'string', label = 'string'},
+    image_button = {x = 'number', y = 'number', w = 'number', h = 'number',
+        name = 'string', label = 'string', texture_name = 'string',
+        noclip = 'string', drawborder = 'string',
+        pressed_texture_name = 'string'},
+    item_image_button = {x = 'number', y = 'number', w = 'number',
+        h = 'number', name = 'string', label = 'string',
+        texture_name = 'string'},
     field = {x = 'number', y = 'number', w = 'number', h = 'number',
         name = 'string', label = 'string', default = 'string'},
     pwdfield = {x = 'number', y = 'number', w = 'number', h = 'number',
@@ -161,9 +168,7 @@ validate = {
 
 validate.vertlabel = validate.label
 validate.button_exit = validate.button
-validate.image_button = validate.button
-validate.image_button_exit = validate.button
-validate.item_image_button = validate.button
+validate.image_button_exit = validate.item_image_button
 
 -- Ensure that an AST tree is safe to display. The resulting tree will be
 -- flattened for simplicity.
