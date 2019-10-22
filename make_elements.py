@@ -36,14 +36,16 @@ def _fix_param(param):
         if ',' not in param:
             param = param.lower().strip().strip('<>').replace(' ', '_')
             param = _aliases.get(param, param)
+            assert param != '...'
             return (param, _known.get(param, 'string'))
         param = param.split(',')
 
     res = []
-    for p in param:
-        if p != '...' or not res:
+    for p in map(str.strip, param):
+        if p != '...':
             res.append(_fix_param(p))
             continue
+        assert res
 
         last = res.pop()
         # Workaround
