@@ -29,29 +29,47 @@
 
 formspec_ast = {}
 
-local minetest = minetest
 local modpath
 
 if minetest then
     -- Running inside Minetest.
+    formspec_ast.minetest = minetest
     modpath = minetest.get_modpath('formspec_ast')
-    is_yes = minetest.is_yes
     assert(minetest.get_current_modname() == 'formspec_ast',
            'This mod must be called formspec_ast!')
 else
     -- Probably running outside Minetest.
     modpath = '.'
-    minetest = core or {}
+    local minetest = {}
     function minetest.is_yes(str)
         str = str:lower()
         return str == 'true' or str == 'yes'
     end
+    function minetest.formspec_escape(text)
+        if text then
+            for _, n in ipairs({'\\', ']', '[', ';', ','}) do
+                text = text:gsub('%' .. n, '\\' .. n)
+            end
+        end
+        return text
+    end
     function string.trim(str)
         return str:gsub("^%s*(.-)%s*$", "%1")
     end
+    -- Mostly copied from https://stackoverflow.com/a/26367080
+    function table.copy(obj, s)
+        if type(obj) ~= 'table' then return obj end
+        if s and s[obj] ~= nil then return s[obj] end
+        s = s or {}
+        local res = {}
+        s[obj] = res
+        for k, v in pairs(obj) do res[table.copy(k, s)] = table.copy(v, s) end
+        return res
+    end
+    formspec_ast.minetest = minetest
 end
 
-formspec_ast.modpath, formspec_ast.minetest = modpath, minetest
+formspec_ast.modpath = modpath
 
 dofile(modpath .. '/core.lua')
 dofile(modpath .. '/helpers.lua')
