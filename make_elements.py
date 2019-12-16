@@ -86,6 +86,13 @@ def _background9_hook(params):
     param.append(('middle_y2', 'number'))
     yield params
 
+# Fix bgcolor
+@hook('bgcolor')
+def _bgcolor_hook(params):
+    yield params
+    for i in range(1, len(params)):
+        yield params[:-i]
+
 def _raw_parse(data):
     data = data.split('\nElements\n--------\n', 1)[-1].split('\n----', 1)[0]
     for line in data.split('\n'):
