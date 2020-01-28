@@ -37,6 +37,7 @@ if minetest then
     modpath = minetest.get_modpath('formspec_ast')
     assert(minetest.get_current_modname() == 'formspec_ast',
            'This mod must be called formspec_ast!')
+    formspec_ast.formspec_escape = minetest.formspec_escape
 else
     -- Probably running outside Minetest.
     modpath = rawget(_G, 'FORMSPEC_AST_PATH') or '.'
@@ -67,6 +68,7 @@ else
         return res
     end
     formspec_ast.minetest = minetest
+    formspec_ast.formspec_escape = minetest.formspec_escape
 end
 
 formspec_ast.modpath = modpath
@@ -76,4 +78,3 @@ dofile(modpath .. '/helpers.lua')
 dofile(modpath .. '/safety.lua')
 
 formspec_ast.modpath, formspec_ast.minetest = nil, nil
-formspec_ast.formspec_escape = minetest.formspec_escape
