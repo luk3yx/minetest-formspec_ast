@@ -39,7 +39,7 @@ if minetest then
            'This mod must be called formspec_ast!')
 else
     -- Probably running outside Minetest.
-    modpath = '.'
+    modpath = rawget(_G, 'FORMSPEC_AST_PATH') or '.'
     local minetest = {}
     function minetest.is_yes(str)
         str = str:lower()
@@ -76,3 +76,4 @@ dofile(modpath .. '/helpers.lua')
 dofile(modpath .. '/safety.lua')
 
 formspec_ast.modpath, formspec_ast.minetest = nil, nil
+formspec_ast.formspec_escape = minetest.formspec_escape
