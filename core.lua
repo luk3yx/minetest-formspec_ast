@@ -80,14 +80,12 @@ local function raw_parse(spec)
                 i = i .. char
             end
         end
-        if i ~= '' or #elem > 1 then
-            if #inner > 0 then
-                table.insert(inner, i)
-                table.insert(elem, inner)
-                inner = {}
-            else
-                table.insert(elem, i)
-            end
+        if #inner > 0 then
+            table.insert(inner, i)
+            table.insert(elem, inner)
+            inner = {}
+        else
+            table.insert(elem, i)
         end
 
         table.insert(res, elem)

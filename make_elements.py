@@ -93,6 +93,12 @@ def _bgcolor_hook(params):
     for i in range(1, len(params)):
         yield params[:-i]
 
+# Fix size
+@hook('size')
+def _size_hook(params):
+    yield params
+    yield [[('w', 'number'), ('h', 'number')]]
+
 def _raw_parse(data):
     data = data.split('\nElements\n--------\n', 1)[-1].split('\n----', 1)[0]
     for line in data.split('\n'):
