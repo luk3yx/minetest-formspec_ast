@@ -32,7 +32,7 @@ def _escape_string(x):
     yield '"'
     for char in x:
         if char == 0x22: # "
-            yield '\"'
+            yield r'\"'
         elif char == 0x5c:
             yield r'\\'
         elif 0x7f > char > 0x19:
