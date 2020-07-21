@@ -35,7 +35,7 @@ def _escape_string(x):
             yield r'\"'
         elif char == 0x5c:
             yield r'\\'
-        elif 0x7f > char > 0x19:
+        elif 0x7f > char > 0x1f:
             yield chr(char)
         else:
             yield '\\' + str(char).zfill(3)
