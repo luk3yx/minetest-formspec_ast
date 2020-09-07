@@ -117,6 +117,16 @@ def _scroll_container_hook(params):
     yield params
     yield params[:4]
 
+# Fix dropdown
+@hook('dropdown')
+def _scroll_container_hook(params):
+    if isinstance(params[1][0], str):
+        params[1] = [('w', 'number'), ('h', 'number')]
+    else:
+        params[1] = ('w', 'number')
+    yield params[:5]
+    yield params
+
 def _raw_parse(data):
     data = data.split('\nElements\n--------\n', 1)[-1].split('\n----', 1)[0]
     for line in data.split('\n'):

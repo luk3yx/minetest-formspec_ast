@@ -62,6 +62,7 @@ local fs = [[
     container_end[]
     image[0,1;1,1;air.png]
     set_focus[name;true]
+    dropdown[0,0;1;test;abc,def,ghi,jkl;2]
 ]]
 fs = ('\n' .. fs):gsub('\n[ \n]*', '')
 
@@ -134,6 +135,15 @@ test_parse_unparse(fs, {
         type = "set_focus",
         name = "name",
         force = true,
+    },
+    {
+        type = "dropdown",
+        x = 0,
+        y = 0,
+        w = 1,
+        name = "test",
+        item = {"abc", "def", "ghi", "jkl"},
+        selected_idx = 2,
     }
 })
 
