@@ -54,6 +54,7 @@ else
         end
         return text
     end
+    minetest.log = print
     function string.trim(str)
         return str:gsub("^%s*(.-)%s*$", "%1")
     end

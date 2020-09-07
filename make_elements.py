@@ -14,9 +14,9 @@ def _make_known(**kwargs):
 
 _known = _make_known(
     number=('x', 'y', 'w', 'h', 'selected_idx', 'version',
-            'starting_item_index'),
+            'starting_item_index', 'scroll_factor'),
     boolean=('auto_clip', 'fixed_size', 'transparent', 'draw_border', 'bool',
-             'fullscreen', 'noclip', 'drawborder', 'selected'),
+             'fullscreen', 'noclip', 'drawborder', 'selected', 'force'),
     table=('param', 'opt', 'prop'),
     null=('',),
 )
@@ -98,6 +98,24 @@ def _bgcolor_hook(params):
 def _size_hook(params):
     yield params
     yield [[('w', 'number'), ('h', 'number')]]
+
+# Fix style and style_type
+@hook('style')
+@hook('style_type')
+def _style_hook(params):
+    # This is not used when parsing but keeps backwards compatibility when
+    # unparsing.
+    params[0] = [('name', 'string')]
+    yield params
+
+    params[0] = [(('selectors', 'string'), '...')]
+    yield params
+
+# Fix scroll_container
+@hook('scroll_container')
+def _scroll_container_hook(params):
+    yield params
+    yield params[:4]
 
 def _raw_parse(data):
     data = data.split('\nElements\n--------\n', 1)[-1].split('\n----', 1)[0]

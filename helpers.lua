@@ -59,7 +59,7 @@ function formspec_ast.walk(tree)
         end
         i = i + 1
 
-        if res.type == 'container' then
+        if res.type == 'container' or res.type == 'scroll_container' then
             table.insert(parents, {tree, i})
             tree = res
             i = 1

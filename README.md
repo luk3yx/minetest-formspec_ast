@@ -24,7 +24,8 @@ A Minetest mod library to make modifying formspecs easier.
  - `formspec_ast.apply_offset(tree, x, y)`: Shifts all elements in `tree`.
     Similar to `container`.
  - `formspec_ast.flatten(tree)`: Removes all containers and offsets elements
-    that were in containers accordingly.
+    that were in containers accordingly. **The use of this function is
+    discouraged as `scroll_container[]` elements are not flattened.**
  - `formspec_ast.show_formspec(player_or_name, formname, formspec)`: Similar
     to `minetest.show_formspec`, however also accepts player objects and will
     pass `formspec` through `formspec_ast.interpret` first.
@@ -40,6 +41,12 @@ The AST is similar (and generated from) [the formspec element list], however
 all attributes are lowercase.
 
 [the formspec element list]: https://github.com/minetest/minetest/blob/dee2210/doc/lua_api.txt#L1959
+
+### Recent backwards incompatibilities
+
+ - The `style[]` element has a `selectors` field instead of `name`. Using
+    `name` when unparsing formspecs still works, however parsed formspecs
+    always use `selectors`.
 
 ### Special cases
 
@@ -73,7 +80,7 @@ readability.*
     },
     {
         type = "style",
-        name = "name",
+        selectors = {"name"},
         props = {
             bgcolor = "blue",
             textcolor = "yellow",
@@ -135,7 +142,7 @@ readability.*
     },
     {
         type = "style",
-        name = "name",
+        selectors = {"name"},
         props = {
             bgcolor = "blue",
             textcolor = "yellow",

@@ -156,7 +156,7 @@ end
 local function parse_value(elems, template)
     local elems_l, template_l = #elems, #template
     if elems_l < template_l or (elems_l > template_l and
-            template[template_l][2] ~= '...') then
+            template_l > 0 and template[template_l][2] ~= '...') then
         while #elems > #template and elems[#elems]:trim() == '' do
             elems[#elems] = nil
         end
@@ -320,10 +320,12 @@ function formspec_ast.parse(spec, custom_handlers)
             return nil, err
         end
         table.insert(container, ast_elem)
-        if ast_elem.type == 'container' then
+        if ast_elem.type == 'container' or
+                ast_elem.type == 'scroll_container' then
             table.insert(containers, container)
             container = ast_elem
-        elseif ast_elem.type == 'container_end' then
+        elseif ast_elem.type == 'end' or ast_elem.type == 'container_end' or
+                ast_elem.type == 'scroll_container_end' then
             container[#container] = nil
             container = table.remove(containers)
             if not container then
@@ -348,6 +350,7 @@ local function unparse_ellipsis(elem, obj1, res, inner)
         end
     elseif type(obj1[2]) == 'string' then
         local value = elem[obj1[1]]
+        if value == nil then return end
         for k, v in ipairs(value) do
             table.insert(res, tostring(v))
         end
@@ -413,14 +416,15 @@ do
 end
 
 local function unparse_elem(elem, res, force)
-    if elem.type == 'container' and not force then
+    if (elem.type == 'container' or
+            elem.type == 'scroll_container') and not force then
         local err = unparse_elem(elem, res, true)
         if err then return err end
         for _, e in ipairs(elem) do
             local err = unparse_elem(e, res)
             if err then return err end
         end
-        return unparse_elem({type='container_end'}, res, true)
+        return unparse_elem({type=elem.type .. '_end'}, res, true)
     end
 
     local data = elements[elem.type]
