@@ -1,5 +1,22 @@
--- dofile('init.lua')
-dofile('test.lua')
+dofile('init.lua')
+
+local function dump(obj)
+    if type(obj) == 'string' then
+        return ('%q'):format(obj)
+    elseif type(obj) == 'table' then
+        local entries = {}
+        for k, v in pairs(obj) do
+            if type(k) == 'string' and k:match('^[a-zA-Z_][a-zA-Z0-9_]*$') then
+                entries[#entries + 1] = k .. ' = ' .. dump(v)
+            else
+                entries[#entries + 1] = '[' .. dump(k) .. '] = ' .. dump(v)
+            end
+        end
+        table.sort(entries)
+        return '{' .. table.concat(entries, ', ') .. '}'
+    end
+    return tostring(obj)
+end
 
 local function equal(t1, t2)
     if type(t1) ~= 'table' or type(t2) ~= 'table' then
@@ -11,7 +28,7 @@ local function equal(t1, t2)
             return false
         end
     end
-    for k, v in pairs(t2) do
+    for k in pairs(t2) do
         if t1[k] == nil then
             return false
         end
@@ -21,7 +38,7 @@ end
 
 local function assert_equal(obj1, ...)
     for i = 1, select('#', ...) do
-        objn = select(i, ...)
+        local objn = select(i, ...)
         if not equal(obj1, objn) then
             error(('%s ~= %s'):format(obj1, objn))
         end
