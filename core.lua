@@ -83,7 +83,6 @@ local function raw_parse(spec)
         if #inner > 0 then
             table.insert(inner, i)
             table.insert(elem, inner)
-            inner = {}
         else
             table.insert(elem, i)
         end
@@ -204,7 +203,7 @@ types['...'] = function(elems, obj, res)
     local template = {obj}
     local val = {}
     local is_string = type(obj[2]) == 'string'
-    for i, elem in ipairs(elems) do
+    for _, elem in ipairs(elems) do
         local n = parse_value({elem}, template)
         if is_string then
             n = n[obj[1]]
@@ -251,7 +250,7 @@ local function parse_elem(elem, custom_handlers)
     end
 
     local good, ast_elem
-    for i, template in ipairs(data) do
+    for _, template in ipairs(data) do
         if type(template) == 'function' then
             good, ast_elem = pcall(template, elem)
             if good and (not ast_elem or not ast_elem.type) then
@@ -351,7 +350,7 @@ local function unparse_ellipsis(elem, obj1, res, inner)
     elseif type(obj1[2]) == 'string' then
         local value = elem[obj1[1]]
         if value == nil then return end
-        for k, v in ipairs(value) do
+        for _, v in ipairs(value) do
             table.insert(res, tostring(v))
         end
     else
@@ -359,7 +358,7 @@ local function unparse_ellipsis(elem, obj1, res, inner)
         local data = elem[elem.type or 'data'] or elem
         for _, elem2 in ipairs(data) do
             local r = {}
-            for i, obj2 in ipairs(obj1) do
+            for _, obj2 in ipairs(obj1) do
                 if obj2[2] == '...' then
                     unparse_ellipsis(elem2, obj2[1], r, true)
                 elseif type(obj2[2]) == 'string' then
@@ -421,7 +420,7 @@ local function unparse_elem(elem, res, force)
         local err = unparse_elem(elem, res, true)
         if err then return err end
         for _, e in ipairs(elem) do
-            local err = unparse_elem(e, res)
+            err = unparse_elem(e, res)
             if err then return err end
         end
         return unparse_elem({type=elem.type .. '_end'}, res, true)
@@ -434,7 +433,7 @@ local function unparse_elem(elem, res, force)
 
     local good, raw_elem
     local possible_elems = {}
-    for i, template in ipairs(data) do
+    for _, template in ipairs(data) do
         if type(template) == 'function' then
             good, raw_elem = false, 'Unknown element.'
         else
@@ -520,7 +519,7 @@ function parse_mt:__index(key)
             return func(obj or '')
         end
     else
-        return function(obj)
+        return function(_)
             error('Unknown element type: ' .. tostring(key))
         end
     end

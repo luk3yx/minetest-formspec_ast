@@ -137,9 +137,9 @@ function formspec_ast.show_formspec(player, formname, formspec)
         return 'No such player!'
     end
 
-    local formspec, err = formspec_ast.interpret(formspec)
-    if formspec then
-        minetest.show_formspec(player, formname, formspec)
+    local new_fs, err = formspec_ast.interpret(formspec)
+    if new_fs then
+        minetest.show_formspec(player, formname, new_fs)
     else
         minetest.log('warning', 'formspec_ast.show_formspec(): ' ..
             tostring(err))
@@ -166,7 +166,7 @@ formspec_ast.register_element('formspec_ast:centered_label', function(raw,
             y = 0,
             w = parse.number(raw[2][1]),
             h = parse.number(raw[2][2]),
-            texture_name = '',
+            texture_name = 'blank.png',
             name = '',
             label = parse.string(raw[3]),
             noclip = true,
@@ -193,7 +193,7 @@ formspec_ast.register_element('formspec_ast:centered_label', function(raw,
 end)
 
 -- Add a formspec element to crash clients
-formspec_ast.register_element('formspec_ast:crash', function(raw, parse)
+formspec_ast.register_element('formspec_ast:crash', function(_, _)
     return {
         type = 'list',
         inventory_location = '___die',

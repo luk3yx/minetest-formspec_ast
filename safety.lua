@@ -186,8 +186,8 @@ function formspec_ast.safe_parse(tree, custom_handlers)
 
     -- Iterate over the tree and add valid elements to a new table.
     local res = {formspec_version = tree.formspec_version}
-    for i, elem in ipairs(tree) do
-        local good, msg = pcall(validate_elem, elem)
+    for _, elem in ipairs(tree) do
+        local good, _ = pcall(validate_elem, elem)
         if good then
             res[#res + 1] = elem
         end
