@@ -241,7 +241,7 @@ local function parse_elem(elem, custom_handlers)
             good, ast_elem = false, "Function didn't return AST element!"
         end
         if good then
-            return ast_elem
+            return ast_elem, true
         else
             table.insert(elem, 1, elem.type)
             return nil, 'Invalid element "' .. raw_unparse({elem}) .. '": ' ..
@@ -251,7 +251,8 @@ local function parse_elem(elem, custom_handlers)
 
     local good, ast_elem
     for _, template in ipairs(data) do
-        if type(template) == 'function' then
+        local custom_element = type(template) == 'function'
+        if custom_element then
             good, ast_elem = pcall(template, elem)
             if good and (not ast_elem or not ast_elem.type) then
                 good, ast_elem = false, "Function didn't return AST element!"
@@ -260,7 +261,7 @@ local function parse_elem(elem, custom_handlers)
             good, ast_elem = pcall(parse_value, elem, template)
         end
         if good then
-            return ast_elem
+            return ast_elem, custom_element
         end
     end
 
@@ -319,8 +320,8 @@ function formspec_ast.parse(spec, custom_handlers)
             return nil, err
         end
         table.insert(container, ast_elem)
-        if ast_elem.type == 'container' or
-                ast_elem.type == 'scroll_container' then
+        if (ast_elem.type == 'container' or
+                ast_elem.type == 'scroll_container') and not err then
             table.insert(containers, container)
             container = ast_elem
         elseif ast_elem.type == 'end' or ast_elem.type == 'container_end' or
