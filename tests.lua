@@ -80,6 +80,8 @@ local fs = [[
     image[0,1;1,1;air.png]
     set_focus[name;true]
     dropdown[0,0;1;test;abc,def,ghi,jkl;2]
+    field_close_on_enter[my-field;false]
+    bgcolor[blue]
 ]]
 fs = ('\n' .. fs):gsub('\n[ \n]*', '')
 
@@ -161,7 +163,16 @@ test_parse_unparse(fs, {
         name = "test",
         item = {"abc", "def", "ghi", "jkl"},
         selected_idx = 2,
-    }
+    },
+    {
+        type = "field_close_on_enter",
+        name = "my-field",
+        close_on_enter = false,
+    },
+    {
+        type = "bgcolor",
+        bgcolor = "blue",
+    },
 })
 
 

@@ -40,13 +40,25 @@ A Minetest mod library to make modifying formspecs easier.
 The AST is similar (and generated from) [the formspec element list], however
 all attributes are lowercase.
 
-[the formspec element list]: https://github.com/minetest/minetest/blob/dee2210/doc/lua_api.txt#L1959
+[the formspec element list]: https://minetest.gitlab.io/minetest/formspec/#elements
 
 ### Recent backwards incompatibilities
 
+While I try to reduce backwards incompatibilities, sometimes they are necessary
+to either fix bugs in formspec_ast or for implementing new formspec features.
+
+#### February 2021
+
+ - The `close_on_enter` value for `field_close_on_enter` is now a boolean
+   instead of a string.
+ - The `frame_count`, `frame_duration` and `frame_start` values in
+   `animated_image` are now numbers.
+
+#### September 2020
+
  - The `style[]` element has a `selectors` field instead of `name`. Using
-    `name` when unparsing formspecs still works, however parsed formspecs
-    always use `selectors`.
+   `name` when unparsing formspecs still works, however parsed formspecs
+   always use `selectors`.
 
 ### Special cases
 
