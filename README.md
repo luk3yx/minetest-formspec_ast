@@ -31,7 +31,7 @@ A Minetest mod library to make modifying formspecs easier.
     pass `formspec` through `formspec_ast.interpret` first.
  - `formspec_ast.safe_parse(string_or_tree)`: Similar to `formspec_ast.parse`,
     however will delete any elements that may crash the client (or any I
-    haven't added to the whitelist).
+    haven't added to the safe element list).
  - `formspec_ast.formspec_escape(text)`: The same as `minetest.formspec_escape`,
     should only be used when formspec_ast is being embedded outside of Minetest.
 
