@@ -50,7 +50,8 @@ end
 -- Similar to ast.flatten(), however removes unsafe elements.
 local function safe_flatten(tree)
     local res = {formspec_version = 1}
-    if tree.formspec_version and tree.formspec_version > 1 then
+    if type(tree.formspec_version) == 'number' and
+            tree.formspec_version > 1 then
         res.formspec_version = 2
     end
     for elem in safe_walk(table.copy(tree)) do
