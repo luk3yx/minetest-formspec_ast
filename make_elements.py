@@ -19,7 +19,7 @@ _known = _make_known(
             'frame_duration', 'frame_start'),
     boolean=('auto_clip', 'fixed_size', 'transparent', 'draw_border', 'bool',
              'fullscreen', 'noclip', 'drawborder', 'selected', 'force',
-             'close_on_enter'),
+             'close_on_enter', 'continuous', 'mouse_control'),
     table=('param', 'opt', 'prop'),
     null=('',),
 )
@@ -74,7 +74,10 @@ def _fix_param(param):
     return res
 
 _hooks = {}
-def hook(name):
+_passive_hooks = set()
+def hook(name, *, passive=False):
+    if passive:
+        _passive_hooks.add(name)
     def add_hook(func):
         _hooks[name] = func
         return func
@@ -119,21 +122,41 @@ def _style_hook(params):
     yield params
 
 # Fix dropdown
-@hook('dropdown')
+@hook('dropdown', passive=True)
 def _scroll_container_hook(params):
     if isinstance(params[1][0], str):
         params[1] = [('w', 'number'), ('h', 'number')]
     else:
         params[1] = ('w', 'number')
-    yield params[:5]
-    yield params
+
+    # Hooks have to return generators
+    return ()
 
 # Fix textlist
-@hook('textlist')
+@hook('textlist', passive=True)
 def _textlist_hook(params):
     if len(params) > 5:
         yield params[:5]
-    yield params
+    return ()
+
+# Work around inconsistent documentation for model[]
+@hook('model')
+def _model_hook(params):
+    # Make textures a list
+    assert params[4] == ('textures', 'string')
+    params[4] = [(('textures', 'string'), '...')]
+
+    # Fix rotation
+    assert params[5] == [('rotation_x', 'string'), ('y', 'number')]
+    params[5] = [('rotation_x', 'number'), ('rotation_y', 'number')]
+
+    # Convert frame_loop_range to frame_loop_{begin,end}
+    assert params[8] == ('frame_loop_range', 'string')
+    params[8] = [('frame_loop_begin', 'number'), ('frame_loop_end', 'number')]
+
+    # Add optional parameters
+    for i in range(5, len(params) + 1):
+        yield params[:i]
 
 _param_re = re.compile(r'^\* `([^`]+)`(?: and `([^`]+)`)?:? ')
 def _raw_parse(data):
@@ -159,7 +182,8 @@ def _raw_parse(data):
         if name in _hooks:
             for p in reversed(tuple(map(copy.deepcopy, _hooks[name](params)))):
                 yield name, p
-            continue
+            if name not in _passive_hooks:
+                continue
 
         # Optional parameters
         optional_params = set()
@@ -211,8 +235,7 @@ def parse(data):
 
     return res
 
-# TODO: Fix model[] parsing then switch this back to the master branch
-URL = 'https://github.com/minetest/minetest/raw/050964b/doc/lua_api.txt'
+URL = 'https://github.com/minetest/minetest/raw/master/doc/lua_api.txt'
 def fetch_and_parse(*, url=URL):
     with urllib.request.urlopen(url) as f:
         raw = f.read()

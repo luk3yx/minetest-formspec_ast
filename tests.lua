@@ -175,6 +175,57 @@ test_parse_unparse(fs, {
     },
 })
 
+local function permutations(elem_s, elem, ...)
+    local res = {}
+    local strings = {}
+    local optional_params = {...}
+    for i = #optional_params, 1, -1 do
+        local p = optional_params[i]
+        local no_copy = {}
+        if type(p) == "table" then
+            for _, param in ipairs(p) do
+                no_copy[param] = true
+            end
+        else
+            no_copy[p] = true
+        end
+
+        res[i] = elem
+        strings[i] = elem_s
+        elem_s = elem_s:gsub(";[^;]+%]$", "]")
+        local old_elem = elem
+        elem = {}
+        for k, v in pairs(old_elem) do
+            if not no_copy[k] then
+                elem[k] = v
+            end
+        end
+    end
+    return table.concat(strings, ""), res
+end
+
+test_parse_unparse(permutations(
+    "model[1,2;3,4;abc;def;ghi,jkl;5,6;true;false;7,8]",
+    {
+        type = "model",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        name = "abc",
+        mesh = "def",
+        textures = {"ghi", "jkl"},
+        rotation_x = 5,
+        rotation_y = 6,
+        continuous = true,
+        mouse_control = false,
+        frame_loop_begin = 7,
+        frame_loop_end = 8
+    },
+    {"rotation_x", "rotation_y"}, "continuous", "mouse_control",
+    {"frame_loop_begin", "frame_loop_end"}
+))
+
 
 -- Make sure style[] (un)parses correctly
 local s = 'style[test1,test2;def=ghi]style_type[test;abc=def]'
