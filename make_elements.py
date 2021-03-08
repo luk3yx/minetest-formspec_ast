@@ -140,6 +140,17 @@ def _textlist_hook(params):
         yield params[:5]
     return ()
 
+# Swap order of tooltip definitions around to fix position parsing
+@hook('tooltip', passive=True)
+def _tooltip_hook(params):
+    if params[0][0] == 'gui_element_name':
+        params[0] = [('x', 'number'), ('y', 'number')]
+        params.insert(1, [('w', 'number'), ('h', 'number')])
+    else:
+        params[0] = ('gui_element_name', 'string')
+        del params[1]
+    return ()
+
 # Work around inconsistent documentation for model[]
 @hook('model')
 def _model_hook(params):

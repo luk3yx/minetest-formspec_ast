@@ -84,6 +84,8 @@ local fs = [[
     bgcolor[blue]
     bgcolor[blue;true]
     bgcolor[blue;both;green]
+    tooltip[1,2;3,4;text]
+    tooltip[elem;text;bgcolor]
 ]]
 fs = ('\n' .. fs):gsub('\n[ \n]*', '')
 
@@ -185,6 +187,20 @@ test_parse_unparse(fs, {
         bgcolor = "blue",
         fullscreen = "both",
         fbgcolor = "green",
+    },
+    {
+        type = "tooltip",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        tooltip_text = "text",
+    },
+    {
+        type = "tooltip",
+        gui_element_name = "elem",
+        tooltip_text = "text",
+        bgcolor = "bgcolor",
     },
 })
 
