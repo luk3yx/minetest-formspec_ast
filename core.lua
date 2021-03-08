@@ -142,6 +142,13 @@ function types.boolean(bool)
     end
 end
 
+function types.fullscreen(param)
+    if param == 'both' or param == 'neither' then
+        return param
+    end
+    return types.boolean(param)
+end
+
 function types.table(obj)
     local s, e = obj:find('=', nil, true)
     assert(s, 'Invalid syntax: "' .. obj .. '".')

@@ -18,8 +18,9 @@ _known = _make_known(
             'starting_item_index', 'scroll_factor', 'frame_count',
             'frame_duration', 'frame_start'),
     boolean=('auto_clip', 'fixed_size', 'transparent', 'draw_border', 'bool',
-             'fullscreen', 'noclip', 'drawborder', 'selected', 'force',
-             'close_on_enter', 'continuous', 'mouse_control'),
+             'noclip', 'drawborder', 'selected', 'force', 'close_on_enter',
+             'continuous', 'mouse_control'),
+    fullscreen=('fullscreen',),
     table=('param', 'opt', 'prop'),
     null=('',),
 )

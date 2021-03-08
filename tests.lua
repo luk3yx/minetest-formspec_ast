@@ -82,6 +82,8 @@ local fs = [[
     dropdown[0,0;1;test;abc,def,ghi,jkl;2]
     field_close_on_enter[my-field;false]
     bgcolor[blue]
+    bgcolor[blue;true]
+    bgcolor[blue;both;green]
 ]]
 fs = ('\n' .. fs):gsub('\n[ \n]*', '')
 
@@ -172,6 +174,17 @@ test_parse_unparse(fs, {
     {
         type = "bgcolor",
         bgcolor = "blue",
+    },
+    {
+        type = "bgcolor",
+        bgcolor = "blue",
+        fullscreen = true,
+    },
+    {
+        type = "bgcolor",
+        bgcolor = "blue",
+        fullscreen = "both",
+        fbgcolor = "green",
     },
 })
 

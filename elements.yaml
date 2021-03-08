@@ -65,10 +65,10 @@ background9:
   - - [middle_x, number]
 bgcolor:
 - - [bgcolor, string]
-  - [fullscreen, boolean]
+  - [fullscreen, fullscreen]
   - [fbgcolor, string]
 - - [bgcolor, string]
-  - [fullscreen, boolean]
+  - [fullscreen, fullscreen]
 - - [bgcolor, string]
 box:
 - - - [x, number]
