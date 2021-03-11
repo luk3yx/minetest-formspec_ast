@@ -19,7 +19,7 @@ _known = _make_known(
             'frame_duration', 'frame_start'),
     boolean=('auto_clip', 'fixed_size', 'transparent', 'draw_border', 'bool',
              'noclip', 'drawborder', 'selected', 'force', 'close_on_enter',
-             'continuous', 'mouse_control'),
+             'continuous', 'mouse_control', 'index_event'),
     fullscreen=('fullscreen',),
     table=('param', 'opt', 'prop'),
     null=('',),

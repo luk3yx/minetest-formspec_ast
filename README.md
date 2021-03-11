@@ -47,6 +47,10 @@ all attributes are lowercase.
 While I try to reduce backwards incompatibilities, sometimes they are necessary
 to either fix bugs in formspec_ast or for implementing new formspec features.
 
+#### March 2021
+
+ - The `index_event` value for `dropdown` is now a boolean instead of a string.
+
 #### February 2021
 
  - The `close_on_enter` value for `field_close_on_enter` is now a boolean

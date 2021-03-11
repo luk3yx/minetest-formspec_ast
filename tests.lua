@@ -80,6 +80,7 @@ local fs = [[
     image[0,1;1,1;air.png]
     set_focus[name;true]
     dropdown[0,0;1;test;abc,def,ghi,jkl;2]
+    dropdown[0,0;1;test;abc,def,ghi,jkl;2;true]
     field_close_on_enter[my-field;false]
     bgcolor[blue]
     bgcolor[blue;true]
@@ -167,6 +168,16 @@ test_parse_unparse(fs, {
         name = "test",
         item = {"abc", "def", "ghi", "jkl"},
         selected_idx = 2,
+    },
+    {
+        type = "dropdown",
+        x = 0,
+        y = 0,
+        w = 1,
+        name = "test",
+        item = {"abc", "def", "ghi", "jkl"},
+        selected_idx = 2,
+        index_event = true,
     },
     {
         type = "field_close_on_enter",
