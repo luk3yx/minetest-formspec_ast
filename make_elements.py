@@ -288,12 +288,7 @@ def main():
     with open(filename, 'w') as f:
         f.write(_comment.lstrip())
         f.write(lua_dump.serialize(data))
-        # elems = fetch_and_parse()
-        # for elem in sorted(elems):
-        #     for def_ in elems[elem]:
-        #         f.write('formspec_ast.register_element({}, {})\n'.format(
-        #             lua_dump.dump(elem), lua_dump.dump(def_)
-        #         ))
+        f.write('\n')
     print('Done.')
 
 if __name__ == '__main__':
