@@ -87,6 +87,9 @@ local fs = [[
     bgcolor[blue;both;green]
     tooltip[1,2;3,4;text]
     tooltip[elem;text;bgcolor]
+    background9[1,2;3,4;bg.png;false;5]
+    background9[1,2;3,4;bg.png;false;5,6]
+    background9[1,2;3,4;bg.png;false;5,6,7,8]
 ]]
 fs = ('\n' .. fs):gsub('\n[ \n]*', '')
 
@@ -213,9 +216,43 @@ test_parse_unparse(fs, {
         tooltip_text = "text",
         bgcolor = "bgcolor",
     },
+    {
+        type = "background9",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "bg.png",
+        auto_clip = false,
+        middle_x = 5,
+    },
+    {
+        type = "background9",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "bg.png",
+        auto_clip = false,
+        middle_x = 5,
+        middle_y = 6,
+    },
+    {
+        type = "background9",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "bg.png",
+        auto_clip = false,
+        middle_x = 5,
+        middle_y = 6,
+        middle_x2 = 7,
+        middle_y2 = 8,
+    },
 })
 
-local function permutations(elem_s, elem, ...)
+local function remove_trailing_params(elem_s, elem, ...)
     local res = {}
     local strings = {}
     local optional_params = {...}
@@ -244,8 +281,8 @@ local function permutations(elem_s, elem, ...)
     return table.concat(strings, ""), res
 end
 
-test_parse_unparse(permutations(
-    "model[1,2;3,4;abc;def;ghi,jkl;5,6;true;false;7,8]",
+test_parse_unparse(remove_trailing_params(
+    "model[1,2;3,4;abc;def;ghi,jkl;5,6;true;false;7,8;9]",
     {
         type = "model",
         x = 1,
@@ -260,10 +297,11 @@ test_parse_unparse(permutations(
         continuous = true,
         mouse_control = false,
         frame_loop_begin = 7,
-        frame_loop_end = 8
+        frame_loop_end = 8,
+        animation_speed = 9
     },
     {"rotation_x", "rotation_y"}, "continuous", "mouse_control",
-    {"frame_loop_begin", "frame_loop_end"}
+    {"frame_loop_begin", "frame_loop_end"}, "animation_speed"
 ))
 
 

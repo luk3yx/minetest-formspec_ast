@@ -402,27 +402,28 @@ local compare_blanks
 do
     local function get_nonempty(a)
         if a.nonempty then
-            return a.nonempty, a.strings
+            return a.nonempty, a.strings, a.total_length
         end
-        local nonempty, strings = 0, 0
+        local nonempty, strings, total_length = 0, 0, #a
         for _, i in ipairs(a) do
             if type(i) == 'string' and i ~= '' then
                 nonempty = nonempty + 1
                 strings = strings + 1
             elseif type(i) == 'table' then
-                nonempty = nonempty + get_nonempty(i)
+                local n, s, t = get_nonempty(i)
+                nonempty = nonempty + n
+                strings = strings + s
+                total_length = total_length + t
             end
         end
-        a.nonempty, a.strings = nonempty, strings
-        return nonempty, strings
+        a.nonempty, a.strings, a.total_length = nonempty, strings, total_length
+        return nonempty, strings, total_length
     end
 
     function compare_blanks(a, b)
-        local a_n, a_strings = get_nonempty(a)
-        local b_n, b_strings = get_nonempty(b)
+        local a_n, a_strings, a_l = get_nonempty(a)
+        local b_n, b_strings, b_l = get_nonempty(b)
         if a_n == b_n then
-            local a_l = #a
-            local b_l = #b
             if a_l == b_l then
                 -- Prefer elements with less tables
                 return a_strings > b_strings
