@@ -144,6 +144,11 @@ def serialize(obj):
                 pass
 
     # This code is heavily inspired by MT's builtin/common/serialize.lua
+    # Copyrights that may apply to this code:
+    # License: MIT
+    # @copyright 2006-2997 Fabien Fleutot <metalua@gmail.com>
+    # @author Fabien Fleutot <metalua@gmail.com>
+    # @author ShadowNinja <shadowninja@minetest.net>
     dumped = {}
     res = []
     def dump_or_ref(obj2):
