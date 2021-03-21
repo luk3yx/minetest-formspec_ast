@@ -287,7 +287,7 @@ def main():
     print('Writing to ' + filename + '...')
     with open(filename, 'w') as f:
         f.write(_comment.lstrip())
-        f.write(lua_dump.serialize(data))
+        f.write(lua_dump.serialize_readonly(data))
         f.write('\n')
     print('Done.')
 

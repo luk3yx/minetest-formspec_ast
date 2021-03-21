@@ -90,6 +90,14 @@ def dump(obj):
     # Clean tracebacks
     raise TypeError(msg)
 
+def serialize(obj):
+    """
+    Serialize an object into valid Lua code. This will raise a TypeError if the
+    object cannot be serialized into lua.
+    """
+
+    return 'return ' + dump(obj)
+
 def _walk(obj, seen):
     yield obj
     if isinstance(obj, dict):
@@ -124,10 +132,11 @@ def _replace_values(obj):
         if isinstance(v, list):
             obj[k] = tuple(v)
 
-def serialize(obj):
+def serialize_readonly(obj):
     """
-    Serialize an object into valid Lua code. This will raise a TypeError if the
-    object cannot be serialized into lua.
+    Serializes an object into a Lua table with the assumption that the
+    resulting table will never be modified. This allows any duplicate lists and
+    tuples to be reused.
     """
 
     # Count all tuples
