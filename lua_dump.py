@@ -47,6 +47,9 @@ class _PartialTypeError(TypeError):
         return 'Object of type ' + repr(type(self.args[0]).__name__) + \
             ' is not Lua serializable.'
 
+def _default_dump_func(obj):
+    return _dump(obj, _default_dump_func)
+
 def _dump(obj, dump_func):
     if isinstance(obj, (set, frozenset)):
         obj = dict.fromkeys(obj, True)
@@ -83,7 +86,7 @@ def dump(obj):
     """
 
     try:
-        return _dump(obj, _dump)
+        return _dump(obj, _default_dump_func)
     except _PartialTypeError as e:
         msg = str(e)
 
