@@ -502,19 +502,18 @@ end
 --         texture_name = "air.png",
 --     }
 -- }
--- Output: size[5,2,]button[0,0;5,1;name;Label]image[0,1;1,1;air.png]
-function formspec_ast.unparse(spec)
+-- Output: size[5,2]button[0,0;5,1;name;Label]image[0,1;1,1;air.png]
+function formspec_ast.unparse(tree)
     local raw_spec = {}
-    for _, elem in ipairs(spec) do
+    if tree.formspec_version and tree.formspec_version ~= 1 then
+        raw_spec[1] = {'formspec_version', tostring(tree.formspec_version)}
+    end
+
+    for _, elem in ipairs(tree) do
         local err = unparse_elem(elem, raw_spec)
         if err then
             return nil, err
         end
-    end
-
-    if spec.formspec_version and spec.formspec_version ~= 1 then
-        table.insert(raw_spec, 1, {'formspec_version',
-                                   tostring(spec.formspec_version)})
     end
     return raw_unparse(raw_spec)
 end
