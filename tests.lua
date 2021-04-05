@@ -345,4 +345,21 @@ assert_equal(
     }))
 )
 
+-- Ensure flatten works correctly
+assert_equal(
+    'label[0,0;abc]label[2,2;def]scroll_container[1,1;2,2;test;vertical]' ..
+        'image[1,1;1,1;def]scroll_container_end[]',
+    formspec_ast.unparse(formspec_ast.flatten(assert(formspec_ast.parse([[
+        label[0,0;abc]
+        container[3,2]
+            container[-1,0]
+                label[0,0;def]
+            container_end[]
+        container_end[]
+        scroll_container[1,1;2,2;test;vertical]
+            image[1,1;1,1;def]
+        scroll_container_end[]
+    ]]))))
+)
+
 print('Tests pass')

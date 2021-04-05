@@ -42,9 +42,7 @@ function formspec_ast.interpret(spec, custom_handlers)
     return formspec_ast.unparse(ast)
 end
 
--- Returns an iterator over all nodes in a formspec AST, including ones in
--- containers.
-function formspec_ast.walk(tree)
+local function walk_inner(tree, container_elems)
     local parents = {}
     local i = 1
     return function()
@@ -59,13 +57,20 @@ function formspec_ast.walk(tree)
         end
         i = i + 1
 
-        if res.type == 'container' or res.type == 'scroll_container' then
+        if container_elems[res.type] then
             table.insert(parents, {tree, i})
             tree = res
             i = 1
         end
         return res
     end
+end
+
+-- Returns an iterator over all nodes in a formspec AST, including ones in
+-- containers.
+local container_elems = {container = true, scroll_container = true}
+function formspec_ast.walk(tree)
+    return walk_inner(tree, container_elems)
 end
 
 -- Similar to formspec_ast.walk(), however only returns nodes which have a type
@@ -114,9 +119,10 @@ function formspec_ast.apply_offset(elems, x, y)
 end
 
 -- Removes container elements and fixes nodes inside containers.
+local flatten_containers = {container = true}
 function formspec_ast.flatten(tree)
     local res = {formspec_version=tree.formspec_version}
-    for elem in formspec_ast.walk(table.copy(tree)) do
+    for elem in walk_inner(table.copy(tree), flatten_containers) do
         if elem.type == 'container' then
             formspec_ast.apply_offset(elem, elem.x, elem.y)
         else
