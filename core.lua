@@ -150,6 +150,7 @@ function types.fullscreen(param)
 end
 
 function types.table(obj)
+    if obj == '' then return end
     local s, e = obj:find('=', nil, true)
     assert(s, 'Invalid syntax: "' .. obj .. '".')
     return {[obj:sub(1, s - 1)] = obj:sub(e + 1)}
@@ -221,8 +222,10 @@ types['...'] = function(elems, obj, res)
     if obj[2] == 'table' then
         local t = {}
         for _, n in ipairs(val) do
-            local k, v = next(n)
-            t[k] = v
+            if n then
+                local k, v = next(n)
+                t[k] = v
+            end
         end
         res[obj[1] .. 's'] = t
     elseif type(obj[2]) == 'string' then
@@ -551,6 +554,7 @@ end
 -- The function should return either a single AST node or a list of multiple
 -- nodes.
 -- Multiple functions can be registered for one element.
+-- This API should not be used outside of formspec_ast.
 function formspec_ast.register_element(name, parse_func)
     assert(type(name) == 'string' and type(parse_func) == 'function')
     if not elements[name] then

@@ -90,6 +90,7 @@ local fs = [[
     background9[1,2;3,4;bg.png;false;5]
     background9[1,2;3,4;bg.png;false;5,6]
     background9[1,2;3,4;bg.png;false;5,6,7,8]
+    tablecolumns[text;image;color,option=value;tree]
 ]]
 fs = ('\n' .. fs):gsub('\n[ \n]*', '')
 
@@ -250,6 +251,15 @@ test_parse_unparse(fs, {
         middle_x2 = 7,
         middle_y2 = 8,
     },
+    {
+        type = "tablecolumns",
+        tablecolumns = {
+            {type = "text", opts = {}},
+            {type = "image", opts = {}},
+            {type = "color", opts = {option = "value"}},
+            {type = "tree", opts = {}},
+        },
+    },
 })
 
 local function remove_trailing_params(elem_s, elem, ...)
@@ -361,5 +371,8 @@ assert_equal(
         scroll_container_end[]
     ]]))))
 )
+
+-- Ensure invsize[] is converted to size[]
+assert_equal(assert(formspec_ast.interpret('invsize[12,34]')), 'size[12,34]')
 
 print('Tests pass')
