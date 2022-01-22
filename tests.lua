@@ -67,6 +67,7 @@ end
 local fs = [[
     formspec_version[2]
     size[5,2]
+    padding[1,2]
     container[1,1]
         label[0,0;Containers are fun]
         container[-1,-1]
@@ -100,6 +101,11 @@ test_parse_unparse(fs, {
         type = "size",
         w = 5,
         h = 2,
+    },
+    {
+        type = "padding",
+        x = 1,
+        y = 2,
     },
     {
         type = "container",
