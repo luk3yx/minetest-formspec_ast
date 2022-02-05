@@ -92,6 +92,8 @@ local fs = [[
     background9[1,2;3,4;bg.png;false;5,6]
     background9[1,2;3,4;bg.png;false;5,6,7,8]
     tablecolumns[text;image;color,option=value;tree]
+    list[test;test2;1,2;3,4;5]
+    list[test6;test7;8,9;10,11]
 ]]
 fs = ('\n' .. fs):gsub('\n[ \n]*', '')
 
@@ -265,6 +267,25 @@ test_parse_unparse(fs, {
             {type = "color", opts = {option = "value"}},
             {type = "tree", opts = {}},
         },
+    },
+    {
+        type = "list",
+        inventory_location = "test",
+        list_name = "test2",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        starting_item_index = 5,
+    },
+    {
+        type = "list",
+        inventory_location = "test6",
+        list_name = "test7",
+        x = 8,
+        y = 9,
+        w = 10,
+        h = 11,
     },
 })
 

@@ -121,7 +121,6 @@ local elements = assert(loadfile(formspec_ast.modpath .. '/elements.lua'))()
 -- Parsing
 local types = {}
 
-function types.null() end
 function types.undefined()
     error('Unknown element type!')
 end
