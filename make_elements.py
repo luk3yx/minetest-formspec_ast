@@ -16,7 +16,7 @@ def _make_known(**kwargs):
 _known = _make_known(
     number=('x', 'y', 'w', 'h', 'selected_idx', 'version',
             'starting_item_index', 'scroll_factor', 'frame_count',
-            'frame_duration', 'frame_start', 'animation_speed'),
+            'frame_duration', 'frame_start', 'animation_speed', 'value'),
     boolean=('auto_clip', 'fixed_size', 'transparent', 'draw_border', 'bool',
              'noclip', 'drawborder', 'selected', 'force', 'close_on_enter',
              'continuous', 'mouse_control', 'index_event'),
