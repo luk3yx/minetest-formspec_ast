@@ -64,12 +64,23 @@ local function test_parse_unparse(fs, expected_tree)
     assert_equal(fs, unparsed_fs)
 end
 
+test_parse_unparse([=[label[123,456;yay abc def\, ghi\; jkl mno \]\\]]=], {
+    formspec_version = 1,
+    {
+        type = 'label',
+        x = 123,
+        y = 456,
+        label = 'yay abc def, ghi; jkl mno ]\\'
+    }
+})
+
 local fs = [[
     formspec_version[2]
     size[5,2]
     padding[1,2]
+    no_prepend[]
     container[1,1]
-        label[0,0;Containers are fun]
+        label[0,0;Containers are fun\]\\]
         container[-1,-1]
             button[0.5,0;4,1;name;Label]
         container_end[]
@@ -110,6 +121,9 @@ test_parse_unparse(fs, {
         y = 2,
     },
     {
+        type = "no_prepend"
+    },
+    {
         type = "container",
         x = 1,
         y = 1,
@@ -117,7 +131,7 @@ test_parse_unparse(fs, {
             type = "label",
             x = 0,
             y = 0,
-            label = "Containers are fun",
+            label = "Containers are fun]\\",
         },
         {
             type = "container",
