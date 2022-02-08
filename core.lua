@@ -29,6 +29,8 @@
 
 local formspec_ast, minetest = formspec_ast, formspec_ast.minetest
 
+local BACKSLASH, SEMICOLON, COMMA, RBRACKET = ('\\;,]'):byte(1, 4)
+
 -- Parse a formspec into a "raw" non-AST state.
 -- Input: size[5,2]button[0,0;5,1;name;Label] image[0,1;1,1;air.png]
 -- Output:
@@ -62,13 +64,11 @@ local function raw_parse(spec)
             if esc then
                 -- The current character is escaped
                 esc = false
-                start_idx = idx
-            elseif byte == 0x5c then
-                -- Backslashes
+            elseif byte == BACKSLASH then
                 part[#part + 1] = spec:sub(start_idx, idx - 1)
+                start_idx = idx + 1
                 esc = true
-            elseif byte == 0x3b then
-                -- Semicolons
+            elseif byte == SEMICOLON then
                 part[#part + 1] = spec:sub(start_idx, idx - 1)
                 start_idx = idx + 1
                 if #inner > 0 then
@@ -79,14 +79,12 @@ local function raw_parse(spec)
                     parts[#parts + 1] = table_concat(part)
                 end
                 part = {}
-            elseif byte == 0x2c then
-                -- Commas
+            elseif byte == COMMA then
                 part[#part + 1] = spec:sub(start_idx, idx - 1)
                 start_idx = idx + 1
                 inner[#inner + 1] = table_concat(part)
                 part = {}
-            elseif byte == 0x5d then
-                -- ]
+            elseif byte == RBRACKET then
                 end_idx = idx
                 break
             end

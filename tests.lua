@@ -416,4 +416,9 @@ assert_equal(
 -- Ensure invsize[] is converted to size[]
 assert_equal(assert(formspec_ast.interpret('invsize[12,34]')), 'size[12,34]')
 
+assert_equal(assert(formspec_ast.interpret('label[1,2;abc\\')),
+    'label[1,2;abc]')
+assert_equal(assert(formspec_ast.interpret('label[1,2;abc\\\\')),
+    'label[1,2;abc\\\\]')
+
 print('Tests pass')
