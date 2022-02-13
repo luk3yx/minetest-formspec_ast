@@ -45,9 +45,12 @@ all attributes are lowercase.
 While I try to reduce backwards incompatibilities, sometimes they are necessary
 to either fix bugs in formspec_ast or for implementing new formspec features.
 
-### February 2022
+#### February 2022
 
  - The value of scrollbars is now a number instead of a string.
+ - The `item`, `listelem`, and `caption` fields are now `items`, `listelems`,
+   and `captions`. The old names still work when unparsing formspecs for now
+   but are no longer used when parsing formspecs.
 
 #### March 2021
 

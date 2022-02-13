@@ -192,7 +192,7 @@ test_parse_unparse(fs, {
         y = 0,
         w = 1,
         name = "test",
-        item = {"abc", "def", "ghi", "jkl"},
+        items = {"abc", "def", "ghi", "jkl"},
         selected_idx = 2,
     },
     {
@@ -201,7 +201,7 @@ test_parse_unparse(fs, {
         y = 0,
         w = 1,
         name = "test",
-        item = {"abc", "def", "ghi", "jkl"},
+        items = {"abc", "def", "ghi", "jkl"},
         selected_idx = 2,
         index_event = true,
     },
@@ -370,6 +370,37 @@ test_parse('style[name,name2;bgcolor=blue;textcolor=yellow]', {
         textcolor = "yellow",
     },
 })
+
+-- Test item/items compatibility
+assert_equal(
+    'dropdown[0,0;1,2;test;abc,def,ghi,jkl;2;true]',
+    assert(formspec_ast.unparse({
+        {
+            type = "dropdown",
+            x = 0,
+            y = 0,
+            w = 1,
+            h = 2,
+            name = "test",
+            items = {"abc", "def", "ghi", "jkl"},
+            selected_idx = 2,
+            index_event = true,
+        },
+    })),
+    assert(formspec_ast.unparse({
+        {
+            type = "dropdown",
+            x = 0,
+            y = 0,
+            w = 1,
+            h = 2,
+            name = "test",
+            item = {"abc", "def", "ghi", "jkl"},
+            selected_idx = 2,
+            index_event = true,
+        },
+    }))
+)
 
 -- Ensure the style[] unparse compatibility works correctly
 assert_equal(

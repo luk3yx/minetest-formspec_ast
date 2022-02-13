@@ -240,7 +240,7 @@ types['...'] = function(elems, obj, res)
                 t[k] = v
             end
         end
-        res[obj[1] .. 's'] = t
+        res[obj[1]] = t
     elseif type(obj[2]) == 'string' then
         res[obj[1]] = val
     else
@@ -361,16 +361,21 @@ function formspec_ast.parse(fs, custom_handlers)
 end
 
 -- Unparsing
+local compat_keys = {listelems = "listelem", items = "item",
+    captions = "caption"}
 local function unparse_ellipsis(elem, obj1, res, inner)
     if obj1[2] == 'table' then
-        local value = elem[obj1[1] .. 's']
+        local value = elem[obj1[1]]
         assert(type(value) == 'table', 'Invalid AST!')
         for k, v in pairs(value) do
             table.insert(res, tostring(k) .. '=' .. tostring(v))
         end
     elseif type(obj1[2]) == 'string' then
         local value = elem[obj1[1]]
-        if value == nil then return end
+        if value == nil then
+            value = elem[compat_keys[obj1[1]]]
+            if value == nil then return end
+        end
         for _, v in ipairs(value) do
             table.insert(res, tostring(v))
         end

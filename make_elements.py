@@ -21,7 +21,7 @@ _known = _make_known(
              'noclip', 'drawborder', 'selected', 'force', 'close_on_enter',
              'continuous', 'mouse_control', 'index_event'),
     fullscreen=('fullscreen',),
-    table=('param', 'opt', 'prop'),
+    table=('params', 'opts', 'props'),
     null=('',),
 )
 
@@ -69,7 +69,7 @@ def _fix_param(param):
         else:
             while res and _get_name(res[-1]) == name:
                 res.pop()
-            res.append((_fix_param(name), '...'))
+            res.append((_fix_param(name + 's'), '...'))
         break
 
     return res
