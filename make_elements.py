@@ -170,6 +170,23 @@ def _model_hook(params):
     for i in range(5, len(params) + 1):
         yield params[:i]
 
+# Parse image_button/image_button_exit like the source code does
+# image_button_exit[] can have the extra parameters as well and
+# pressed_texture_name is optional if noclip and drawborder are specified.
+@hook('image_button')
+@hook('image_button_exit')
+def _image_button_hook(params):
+    if len(params) != 5:
+        assert len(params) == 8
+        return
+
+    yield params
+    params.append(('noclip', 'boolean'))
+    params.append(('drawborder', 'boolean'))
+    yield params
+    params.append(('pressed_texture_name', 'string'))
+    yield params
+
 _param_re = re.compile(r'^\* `([^`]+)`(?: and `([^`]+)`)?:? ')
 def _raw_parse(data):
     # Get everything from the elements heading to the end of the next heading

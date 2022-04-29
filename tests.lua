@@ -105,6 +105,12 @@ local fs = [[
     tablecolumns[text;image;color,option=value;tree]
     list[test;test2;1,2;3,4;5]
     list[test6;test7;8,9;10,11]
+    image_button[1,2;3,4;img.png;name;label]
+    image_button[1,2;3,4;img.png;name;label;false;true]
+    image_button[1,2;3,4;img.png;name;label;true;false;img2.png]
+    image_button_exit[1,2;3,4;img.png;name;label]
+    image_button_exit[1,2;3,4;img.png;name;label;false;true]
+    image_button_exit[1,2;3,4;img.png;name;label;true;false;img2.png]
 ]]
 fs = ('\n' .. fs):gsub('\n[ \n]*', '')
 
@@ -300,6 +306,76 @@ test_parse_unparse(fs, {
         y = 9,
         w = 10,
         h = 11,
+    },
+    {
+        type = "image_button",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "img.png",
+        name = "name",
+        label = "label",
+    },
+    {
+        type = "image_button",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "img.png",
+        name = "name",
+        label = "label",
+        noclip = false,
+        drawborder = true,
+    },
+    {
+        type = "image_button",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "img.png",
+        name = "name",
+        label = "label",
+        noclip = true,
+        drawborder = false,
+        pressed_texture_name = "img2.png",
+    },
+    {
+        type = "image_button_exit",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "img.png",
+        name = "name",
+        label = "label",
+    },
+    {
+        type = "image_button_exit",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "img.png",
+        name = "name",
+        label = "label",
+        noclip = false,
+        drawborder = true,
+    },
+    {
+        type = "image_button_exit",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "img.png",
+        name = "name",
+        label = "label",
+        noclip = true,
+        drawborder = false,
+        pressed_texture_name = "img2.png",
     },
 })
 
