@@ -84,10 +84,15 @@ def hook(name, *, passive=False):
         return func
     return add_hook
 
-# Fix background9
+# Fix 9-slice co-ordinates
 @hook('background9')
+@hook('image', passive=True)
+@hook('animated_image', passive=True)
 def _background9_hook(params):
-    assert params[-1] == ('middle', 'string')
+    if params[-1] != ('middle', 'string'):
+        assert ('middle', 'string') not in params
+        return
+
     params[-1] = param = []
     param.append(('middle_x', 'number'))
     yield params
@@ -96,6 +101,7 @@ def _background9_hook(params):
     param.append(('middle_x2', 'number'))
     param.append(('middle_y2', 'number'))
     yield params
+    del params[-1]
 
 # Fix bgcolor
 @hook('bgcolor')

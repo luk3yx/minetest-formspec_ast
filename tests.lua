@@ -111,6 +111,9 @@ local fs = [[
     image_button_exit[1,2;3,4;img.png;name;label]
     image_button_exit[1,2;3,4;img.png;name;label;false;true]
     image_button_exit[1,2;3,4;img.png;name;label;true;false;img2.png]
+    image[1,2;3,4;air.png;5]
+    image[1,2;3,4;air.png;5,6]
+    image[1,2;3,4;air.png;5,6,7,8]
 ]]
 fs = ('\n' .. fs):gsub('\n[ \n]*', '')
 
@@ -376,6 +379,37 @@ test_parse_unparse(fs, {
         noclip = true,
         drawborder = false,
         pressed_texture_name = "img2.png",
+    },
+    {
+        type = "image",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "air.png",
+        middle_x = 5,
+    },
+    {
+        type = "image",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "air.png",
+        middle_x = 5,
+        middle_y = 6,
+    },
+    {
+        type = "image",
+        x = 1,
+        y = 2,
+        w = 3,
+        h = 4,
+        texture_name = "air.png",
+        middle_x = 5,
+        middle_y = 6,
+        middle_x2 = 7,
+        middle_y2 = 8,
     },
 })
 
