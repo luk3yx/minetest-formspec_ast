@@ -1,12 +1,12 @@
 --
--- formspec_ast: An abstract system tree for formspecs.
+-- formspec_ast: An abstract syntax tree for formspecs.
 --
 -- This does not actually depend on Minetest and could probably run in
 -- standalone Lua.
 --
 -- The MIT License (MIT)
 --
--- Copyright © 2019 by luk3yx.
+-- Copyright © 2019-2022 by luk3yx.
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to
@@ -541,8 +541,8 @@ end
 
 -- Allow other mods to access raw_parse and raw_unparse. Note that these may
 -- change or be removed at any time.
-formspec_ast._raw_parse = raw_parse
-formspec_ast._raw_unparse = raw_unparse
+-- formspec_ast._raw_parse = raw_parse
+-- formspec_ast._raw_unparse = raw_unparse
 
 -- Register custom elements
 parse_mt = {}

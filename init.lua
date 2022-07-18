@@ -1,12 +1,12 @@
 --
--- formspec_ast: An abstract system tree for formspecs.
+-- formspec_ast: An abstract syntax tree for formspecs.
 --
 -- This does not actually depend on Minetest and could probably run in
 -- standalone Lua.
 --
 -- The MIT License (MIT)
 --
--- Copyright © 2019 by luk3yx.
+-- Copyright © 2019-2022 by luk3yx.
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to
@@ -37,7 +37,6 @@ if minetest then
     modpath = minetest.get_modpath('formspec_ast')
     assert(minetest.get_current_modname() == 'formspec_ast',
            'This mod must be called formspec_ast!')
-    formspec_ast.formspec_escape = minetest.formspec_escape
 else
     -- Probably running outside Minetest.
     modpath = rawget(_G, 'FORMSPEC_AST_PATH') or '.'
@@ -69,13 +68,21 @@ else
         return res
     end
     formspec_ast.minetest = minetest
-    formspec_ast.formspec_escape = minetest.formspec_escape
 end
 
 formspec_ast.modpath = modpath
 
 dofile(modpath .. '/core.lua')
 dofile(modpath .. '/helpers.lua')
-dofile(modpath .. '/safety.lua')
+
+-- Lazy load safety.lua because I don't think anything actually uses it
+function formspec_ast.safe_parse(...)
+    dofile(modpath .. '/safety.lua')
+    return formspec_ast.safe_parse(...)
+end
+
+function formspec_ast.safe_interpret(tree)
+    return formspec_ast.unparse(formspec_ast.safe_parse(tree))
+end
 
 formspec_ast.modpath, formspec_ast.minetest = nil, nil

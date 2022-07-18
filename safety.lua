@@ -1,12 +1,12 @@
 --
--- formspec_ast: An abstract system tree for formspecs.
+-- formspec_ast: An abstract syntax tree for formspecs.
 --
 -- This verifies that formspecs from untrusted sources are safe(-ish) to
 -- display, provided they are passed through formspec_ast.interpret.
 --
 -- The MIT License (MIT)
 --
--- Copyright © 2019 by luk3yx.
+-- Copyright © 2019-2022 by luk3yx.
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to
@@ -27,8 +27,8 @@
 -- IN THE SOFTWARE.
 --
 
--- Similar to ast.walk(), however returns {} and then exits if walk() would
--- crash. Use this for untrusted formspecs, otherwise use walk() for speed.
+-- Similar to ast.walk(), however returns nil if walk() would crash. Use this
+-- for untrusted formspecs, otherwise use walk() for speed.
 local function safe_walk(tree)
     local walk = formspec_ast.walk(tree)
     local seen = {}
@@ -36,13 +36,9 @@ local function safe_walk(tree)
         if not walk or not seen then return end
 
         local good, msg = pcall(walk)
-        if good and (type(msg) == 'table' or msg == nil) and not seen[msg] then
-            if msg then
-                seen[msg] = true
-            end
+        if good and type(msg) == 'table' and not seen[msg] then
+            seen[msg] = true
             return msg
-        else
-            return {}
         end
     end
 end
@@ -52,7 +48,7 @@ local function safe_flatten(tree)
     local res = {formspec_version = 1}
     if type(tree.formspec_version) == 'number' and
             tree.formspec_version > 1 then
-        res.formspec_version = 2
+        res.formspec_version = math.min(math.floor(tree.formspec_version), 6)
     end
     for elem in safe_walk(table.copy(tree)) do
         if elem.type == 'container' then
@@ -76,14 +72,38 @@ function ensure.string(obj)
 end
 
 function ensure.number(obj, max, min)
+    if obj == nil then return end
+
     local res = tonumber(obj)
     assert(res ~= nil and res == res)
     assert(res <= (max or 100) and res >= (min or 0))
     return res
 end
 
+function ensure.boolean(bool)
+    assert(type(bool) == "boolean" or bool == nil)
+    return bool
+end
+
 function ensure.integer(obj)
     return math.floor(ensure.number(obj))
+end
+
+function ensure.texture(obj)
+    return ensure.string(obj):match("^[^%[]+")
+end
+
+function ensure.list(items)
+    assert(type(items) == 'table')
+    for k, v in pairs(items) do
+        assert(type(k) == 'number' and type(v) == 'string')
+    end
+    return items
+end
+
+function ensure.inventory_location(location)
+    assert(location == 'current_node' or location == 'current_player')
+    return location
 end
 
 local validate
@@ -95,15 +115,11 @@ local function validate_elem(obj)
         if k == 'type' then
             func = ensure.string
         else
-            local type_ = template[k]
-            if type(type_) == 'string' then
-                if type_:sub(#type_) == '?' then
-                    type_ = type_:sub(1, #type_ - 1)
-                end
-                func = ensure[type_]
-            elseif type(type_) == 'function' then
-                func = type_
+            local value_type = template[k]
+            if value_type and value_type:sub(-1) == '?' then
+                value_type = value_type:sub(1, -2)
             end
+            func = ensure[value_type]
         end
 
         if func then
@@ -114,7 +130,7 @@ local function validate_elem(obj)
     end
 
     for k, v in pairs(template) do
-        if type(v) ~= 'string' or v:sub(#v) ~= '?' then
+        if v:sub(-1) ~= '?' then
             assert(obj[k] ~= nil, k .. ' does not exist!')
         end
     end
@@ -124,16 +140,16 @@ validate = {
     size = {w = 'number', h = 'number'},
     label = {x = 'number', y = 'number', label = 'string'},
     image = {x = 'number', y = 'number', w = 'number', h = 'number',
-        texture_name = 'string'},
+        texture_name = 'texture'},
     button = {x = 'number', y = 'number', w = 'number', h = 'number',
         name = 'string', label = 'string'},
     image_button = {x = 'number', y = 'number', w = 'number', h = 'number',
-        name = 'string', label = 'string', texture_name = 'string',
+        name = 'string', label = 'string', texture_name = 'texture',
         noclip = 'string', drawborder = 'string',
-        pressed_texture_name = 'string'},
+        pressed_texture_name = 'texture'},
     item_image_button = {x = 'number', y = 'number', w = 'number',
         h = 'number', name = 'string', label = 'string',
-        texture_name = 'string'},
+        texture_name = 'texture'},
     field = {x = 'number', y = 'number', w = 'number', h = 'number',
         name = 'string', label = 'string', default = 'string'},
     pwdfield = {x = 'number', y = 'number', w = 'number', h = 'number',
@@ -142,14 +158,13 @@ validate = {
     textarea = {x = 'number', y = 'number', w = 'number', h = 'number',
         name = 'string', label = 'string', default = 'string'},
     dropdown = {
-        x = 'number', y = 'number', w = 'number', name = 'string',
-        items = function(items)
-            assert(type(items) == 'list')
-            for k, v in pairs(items) do
-                assert(type(k) == 'number' and type(v) == 'string')
-            end
-        end,
-        selected_idx = 'integer',
+        x = 'number', y = 'number', w = 'number', h = 'number?',
+        name = 'string', items = 'list', selected_idx = 'integer',
+    },
+    textlist = {
+        x = 'number', y = 'number', w = 'number', h = 'number?',
+        name = 'string', listelems = 'list', selected_idx = 'integer?',
+        transparent = 'boolean?',
     },
     checkbox = {x = 'number', y = 'number', name = 'string', label = 'string',
         selected = 'string'},
@@ -157,12 +172,9 @@ validate = {
         color = 'string'},
 
     list = {
-        inventory_location = function(location)
-            assert(location == 'current_node' or location == 'current_player')
-            return location
-        end,
-        list_name = 'string', x = 'number', y = 'number', w = 'number',
-        h = 'number', starting_item_index = 'number?',
+        inventory_location = 'inventory_location', list_name = 'string',
+        x = 'number', y = 'number', w = 'number', h = 'number',
+        starting_item_index = 'number?',
     },
     listring = {},
 }
@@ -195,8 +207,4 @@ function formspec_ast.safe_parse(tree, custom_handlers)
     end
 
     return res
-end
-
-function formspec_ast.safe_interpret(tree)
-    return formspec_ast.unparse(formspec_ast.safe_parse(tree))
 end

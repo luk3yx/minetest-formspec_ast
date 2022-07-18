@@ -22,14 +22,17 @@ A Minetest mod library to make modifying formspecs easier.
  - `formspec_ast.apply_offset(tree, x, y)`: Shifts all elements in `tree`.
     Similar to `container`.
  - `formspec_ast.flatten(tree)`: Removes all containers and offsets elements
-    that were in containers accordingly. **The use of this function is
-    discouraged as `scroll_container[]` elements are not flattened.**
+    that were in containers accordingly. Note that `scroll_container[]`
+    elements are not flattened.
  - `formspec_ast.show_formspec(player_or_name, formname, formspec)`: Similar
     to `minetest.show_formspec`, however also accepts player objects and will
     pass `formspec` through `formspec_ast.interpret` first.
  - `formspec_ast.safe_parse(string_or_tree)`: Similar to `formspec_ast.parse`,
     however will delete any elements that may crash the client (or any I
-    haven't added to the safe element list).
+    haven't added to the safe element list). The safe element list that this
+    function uses is very limited, it may break complex formspecs.
+ - `formspec_ast.safe_interpret(string_or_tree)`: Equivalent to
+    `formspec_ast.unparse(formspec_ast.safe_parse(string_or_tree))`.
  - `formspec_ast.formspec_escape(text)`: The same as `minetest.formspec_escape`,
     should only be used when formspec_ast is being embedded outside of Minetest.
 

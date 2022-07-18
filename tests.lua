@@ -562,4 +562,20 @@ assert_equal(assert(formspec_ast.interpret('label[1,2;abc\\')),
 assert_equal(assert(formspec_ast.interpret('label[1,2;abc\\\\')),
     'label[1,2;abc\\\\]')
 
+assert_equal(formspec_ast.formspec_escape('label[1,2;abc\\def]'),
+    'label\\[1\\,2\\;abc\\\\def\\]')
+
+assert_equal(
+    formspec_ast.safe_interpret([[
+        formspec_version[5.1]
+        size[3,3]
+        label[0,0;Hi]
+        image[1,2;3,4;a^b\[c]
+        formspec_ast:crash[]
+        textlist[1,2;3,4;test;a,b,c]
+    ]]),
+    'formspec_version[5]size[3,3]label[0,0;Hi]image[1,2;3,4;a^b]' ..
+    'textlist[1,2;3,4;test;a,b,c]'
+)
+
 print('Tests pass')

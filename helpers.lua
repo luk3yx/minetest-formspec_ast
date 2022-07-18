@@ -1,12 +1,12 @@
 --
--- formspec_ast: An abstract system tree for formspecs.
+-- formspec_ast: An abstract syntax tree for formspecs.
 --
 -- This does not actually depend on Minetest and could probably run in
 -- standalone Lua.
 --
 -- The MIT License (MIT)
 --
--- Copyright © 2019 by luk3yx.
+-- Copyright © 2019-2022 by luk3yx.
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to
@@ -28,6 +28,9 @@
 --
 
 local formspec_ast, minetest = formspec_ast, formspec_ast.minetest
+
+-- Expose minetest.formspec_escape for use outside of Minetest
+formspec_ast.formspec_escape = minetest.formspec_escape
 
 -- Parses and unparses plain formspecs and just unparses AST trees.
 function formspec_ast.interpret(spec, custom_handlers)
