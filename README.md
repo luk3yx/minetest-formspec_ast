@@ -55,6 +55,12 @@ to either fix bugs in formspec_ast or for implementing new formspec features.
    and `captions`. The old names still work when unparsing formspecs for now
    but are no longer used when parsing formspecs.
 
+#### July 2022
+
+ - `formspec_ast.safe_parse` now removes texture modifiers from `image[]` and
+   `image_button[]` (excluding overlaying and grouping) as it's possible to
+   crash clients with certain texture modifiers.
+
 #### March 2021
 
  - The `index_event` value for `dropdown` is now a boolean instead of a string.
