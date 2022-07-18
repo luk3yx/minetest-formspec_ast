@@ -48,18 +48,18 @@ all attributes are lowercase.
 While I try to reduce backwards incompatibilities, sometimes they are necessary
 to either fix bugs in formspec_ast or for implementing new formspec features.
 
+#### July 2022
+
+ - `formspec_ast.safe_parse` now removes texture modifiers from `image[]` and
+   `image_button[]` (excluding overlaying and grouping) as it's possible to
+   crash clients with certain texture modifiers.
+
 #### February 2022
 
  - The value of scrollbars is now a number instead of a string.
  - The `item`, `listelem`, and `caption` fields are now `items`, `listelems`,
    and `captions`. The old names still work when unparsing formspecs for now
    but are no longer used when parsing formspecs.
-
-#### July 2022
-
- - `formspec_ast.safe_parse` now removes texture modifiers from `image[]` and
-   `image_button[]` (excluding overlaying and grouping) as it's possible to
-   crash clients with certain texture modifiers.
 
 #### March 2021
 
