@@ -9,3 +9,5 @@ jobs:
         uses: Roang-zero1/factorio-mod-luacheck@master
         with:
           luacheckrc_url: ""
+      - name: test
+        run: lua tests.lua

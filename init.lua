@@ -75,6 +75,8 @@ formspec_ast.modpath = modpath
 dofile(modpath .. '/core.lua')
 dofile(modpath .. '/helpers.lua')
 
+formspec_ast.modpath, formspec_ast.minetest = nil, nil
+
 -- Lazy load safety.lua because I don't think anything actually uses it
 function formspec_ast.safe_parse(...)
     dofile(modpath .. '/safety.lua')
@@ -84,5 +86,3 @@ end
 function formspec_ast.safe_interpret(tree)
     return formspec_ast.unparse(formspec_ast.safe_parse(tree))
 end
-
-formspec_ast.modpath, formspec_ast.minetest = nil, nil
