@@ -90,7 +90,7 @@ function ensure.integer(obj)
 end
 
 function ensure.texture(obj)
-    return ensure.string(obj):match("^[^%[]+")
+    return ensure.string(obj):match("^[^%[]*")
 end
 
 function ensure.list(items)
