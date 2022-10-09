@@ -436,6 +436,17 @@ scrollbar:
   - [orientation, string]
   - [name, string]
   - [value, number]
+  - - [scrollbar_bg, string]
+    - [slider, string]
+    - [arrow_up, string]
+    - [arrow_down, string]
+- - - [x, number]
+    - [y, number]
+  - - [w, number]
+    - [h, number]
+  - [orientation, string]
+  - [name, string]
+  - [value, number]
 scrollbaroptions:
 - - - [opts, table]
     - '...'

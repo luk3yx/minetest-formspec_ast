@@ -193,6 +193,19 @@ def _image_button_hook(params):
     params.append(('pressed_texture_name', 'string'))
     yield params
 
+# Support MultiCraft's non-standard scrollbar styling
+# WARNING: This may be removed or broken without notice
+@hook('scrollbar')
+def _scrollbar_hook(params):
+    assert len(params) == 5
+    yield params
+
+    params.append([
+        ('scrollbar_bg', 'string'), ('slider', 'string'),
+        ('arrow_up', 'string'), ('arrow_down', 'string')
+    ])
+    yield params
+
 _param_re = re.compile(r'^\* `([^`]+)`(?: and `([^`]+)`)?:? ')
 def _raw_parse(data):
     # Get everything from the elements heading to the end of the next heading
