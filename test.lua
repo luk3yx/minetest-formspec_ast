@@ -1,5 +1,7 @@
 dofile('init.lua')
 
+-- luacheck: read_globals assert it describe
+
 local function test_parse(fs, expected_tree)
     -- Make single elements lists and add formspec_version
     if expected_tree.type then
@@ -530,7 +532,8 @@ it("flattens formspecs correctly", function()
 end)
 
 it("interprets invsize[] and escapes correctly", function()
-    assert.equals(assert(formspec_ast.interpret('invsize[12,34]')), 'size[12,34]')
+    assert.equals(assert(formspec_ast.interpret('invsize[12,34]')),
+        'size[12,34]')
 
     assert.equals(assert(formspec_ast.interpret('label[1,2;abc\\')),
         'label[1,2;abc]')

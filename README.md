@@ -50,7 +50,7 @@ to either fix bugs in formspec_ast or for implementing new formspec features.
 
 #### April 2023
 
- - The `current_tab` value of dropdowns is now parsed as a number.
+ - The `current_tab` value of tabheader elements is now parsed as a number.
 
 #### February 2022
 
