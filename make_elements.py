@@ -14,7 +14,7 @@ def _make_known(**kwargs):
     return known
 
 _known = _make_known(
-    number=('x', 'y', 'w', 'h', 'selected_idx', 'version',
+    number=('x', 'y', 'w', 'h', 'selected_idx', 'version', 'current_tab',
             'starting_item_index', 'scroll_factor', 'frame_count',
             'frame_duration', 'frame_start', 'animation_speed', 'value'),
     boolean=('auto_clip', 'fixed_size', 'transparent', 'draw_border', 'bool',
@@ -193,6 +193,19 @@ def _image_button_hook(params):
     params.append(('pressed_texture_name', 'string'))
     yield params
 
+
+# Work around tabheader's documentation
+@hook('tabheader')
+def _tabheader_hook(params):
+    yield params
+    if len(params) == 6:
+        assert params[4:] == [
+            ('transparent', 'boolean'),
+            ('draw_border', 'boolean'),
+        ]
+        yield params[:4]
+
+
 # Support MultiCraft's non-standard scrollbar styling
 # WARNING: This may be removed or broken without notice
 @hook('scrollbar')
@@ -283,7 +296,7 @@ def parse(data):
 
     return res
 
-URL = 'https://github.com/minetest/minetest/raw/master/doc/lua_api.txt'
+URL = 'https://github.com/minetest/minetest/raw/master/doc/lua_api.md'
 def fetch_and_parse(*, url=URL):
     with urllib.request.urlopen(url) as f:
         raw = f.read()

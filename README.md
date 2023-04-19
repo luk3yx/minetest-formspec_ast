@@ -48,6 +48,10 @@ all attributes are lowercase.
 While I try to reduce backwards incompatibilities, sometimes they are necessary
 to either fix bugs in formspec_ast or for implementing new formspec features.
 
+#### April 2023
+
+ - The `current_tab` value of dropdowns is now parsed as a number.
+
 #### February 2022
 
  - The value of scrollbars is now a number instead of a string.
