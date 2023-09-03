@@ -706,7 +706,7 @@ describe("helpers", function ()
             }, tree)
         end)
         it("can provide parent info when walking", function ()
-local tree = {
+            local tree = {
                 { type = "box", color = "green" },
                 { type = "label", label = "the text" },
                 {
@@ -770,7 +770,11 @@ local tree = {
                         is_child_thingy = true,
                         { type = "box", color = "red", is_child_thingy = true }
                     },
-                    { type = "label", label = "the new text", is_child_thingy = true }
+                    {
+                        type = "label",
+                        label = "the new text",
+                        is_child_thingy = true
+                    }
                 }
             }, tree)
         end)
