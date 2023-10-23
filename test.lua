@@ -374,6 +374,7 @@ it("can round-trip most elements", function()
         },
         {
             type = "field_enter_after_edit",
+            name = "test",
             enter_after_edit = true,
         },
     })
