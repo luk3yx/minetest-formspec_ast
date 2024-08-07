@@ -75,6 +75,8 @@ it("can round-trip most elements", function()
         image[1,2;3,4;air.png;5,6]
         image[1,2;3,4;air.png;5,6,7,8]
         field_enter_after_edit[test;true]
+        button_url[1,2;3,4;test;Test;https://example.com]
+        button_url_exit[1,2;3,4;test2;Test 2;https://example.com]
     ]]
     fs = ('\n' .. fs):gsub('\n[ \n]*', '')
 
@@ -376,6 +378,26 @@ it("can round-trip most elements", function()
             type = "field_enter_after_edit",
             name = "test",
             enter_after_edit = true,
+        },
+        {
+            type = "button_url",
+            x = 1,
+            y = 2,
+            w = 3,
+            h = 4,
+            name = "test",
+            label = "Test",
+            url = "https://example.com",
+        },
+        {
+            type = "button_url_exit",
+            x = 1,
+            y = 2,
+            w = 3,
+            h = 4,
+            name = "test2",
+            label = "Test 2",
+            url = "https://example.com",
         },
     })
 end)

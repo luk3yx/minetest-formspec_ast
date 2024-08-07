@@ -124,6 +124,22 @@ button_exit:
     - [h, number]
   - [name, string]
   - [label, string]
+button_url:
+- - - [x, number]
+    - [y, number]
+  - - [w, number]
+    - [h, number]
+  - [name, string]
+  - [label, string]
+  - [url, string]
+button_url_exit:
+- - - [x, number]
+    - [y, number]
+  - - [w, number]
+    - [h, number]
+  - [name, string]
+  - [label, string]
+  - [url, string]
 checkbox:
 - - - [x, number]
     - [y, number]
